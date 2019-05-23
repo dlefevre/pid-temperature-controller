@@ -31,7 +31,7 @@ class AbstractScreen : public Executable {
         char * fmtDec(int whole, int fraction);
         char * fmtDec(long value);
         char * fmtTime(int hours, int minutes, int seconds);
-        char * fmtTime(long time);
+        char * fmtTime(unsigned long time);
 
         void setSelectorMax(int);
     

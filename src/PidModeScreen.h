@@ -15,9 +15,9 @@ class PidModeScreen : public AbstractScreen {
 
         PidModeScreen();
         void render() override;
-        inline void renderSetPoint() FORCE_INLINE;
-        inline void renderTemperature() FORCE_INLINE;
-        inline void renderAlarm() FORCE_INLINE;
+        void renderSetPoint();
+        void renderTemperature();
+        void renderAlarm();
         void renderSelector();
         
     private:

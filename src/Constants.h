@@ -34,6 +34,11 @@
 #define LCD_D6 9
 #define LCD_D7 10
 
+// Other pins
+#define HEATER_PIN 11
+#define ACTIVEPIN 12
+#define PIEZO_PIN 13
+
 // Some magic macros
 #define FORCE_INLINE __attribute__((always_inline))
 

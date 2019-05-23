@@ -4,6 +4,7 @@
 
 #include "PidModeScreen.h"
 #include "TemperatureProbe.h"
+#include "Alarm.h"
 
 // Buffer for sprintf
 char buf[21];
@@ -42,18 +43,17 @@ void PidModeScreen::renderTemperature() {
  * Render alarm
  */
 void PidModeScreen::renderAlarm() {
-    // TODO: Fetch alarm time
+    static Alarm & alarm = Alarm::instance();
+
     lcd.setCursor(2, 1);
     lcd.print("A: ");
-    lcd.print(fmtTime(0));
+    lcd.print(fmtTime(alarm.getTime()));
 }
 
 /*
  * Render cursor
  */
 void PidModeScreen::renderSelector() {
-    Serial.print((unsigned int)(void *)this);
-    Serial.println();
     for(int i=0; i<3; ++i) {
         lcd.setCursor(0, i);
         if(i == selectorPosition) {

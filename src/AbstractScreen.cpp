@@ -83,7 +83,7 @@ char * AbstractScreen::fmtTime(int hours, int minutes, int seconds) {
 /*
  * Convert seconds to a formatted string.
  */
-char * AbstractScreen::fmtTime(long time) {
+char * AbstractScreen::fmtTime(unsigned long time) {
     return fmtTime(time / 3600, time % 3600 / 60, time % 60);
 }
 

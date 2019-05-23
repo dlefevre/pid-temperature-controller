@@ -9,6 +9,7 @@
 #include "Constants.h"
 #include "Config.h"
 #include "Buttons.h"
+#include "Alarm.h"
 
 Controller &controller = Controller::instance();
 
@@ -67,6 +68,10 @@ void setup() {
     // Start reading from the PT100 probe.
     TemperatureProbe &probe = TemperatureProbe::instance();
     taskManager.scheduleFixedRate(10, &probe);
+
+    // Schedule the alarm
+    Alarm &alarm = Alarm::instance();
+    taskManager.scheduleFixedRate(1000, &alarm);
 
     // Switch to first screen
     controller.switchToPID();
