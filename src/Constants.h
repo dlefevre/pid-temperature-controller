@@ -5,9 +5,18 @@
 #ifndef __CONSTANTS_H__
 #define __CONSTANTS_H__
 
-// Analog pins
+// Temperature pin
 #define TEMPERATURE_PROBE_PIN A0
-#define BUTTONS_PIN           A1
+
+// Parameters for analog buttons
+#define BUTTONS_PIN     A1
+#define BUTTONS_DBFM    2
+#define BUTTONS_MARGIN  25
+#define BUTTONS_VALUE_1 1023
+#define BUTTONS_VALUE_2 849
+#define BUTTONS_VALUE_3 714
+#define BUTTONS_VALUE_4 615
+
 // Parameters for temperature probe smoothing
 #define SMOOTHING_WEIGHTING_FACTOR 5
 #define DEFAULT_VALUE 255L

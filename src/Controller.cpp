@@ -8,26 +8,65 @@
 #include <IoAbstraction.h>
 
 void Controller::switchToPID(){
-    PidModeScreen &screen = PidModeScreen::instance();
+    static PidModeScreen &screen = PidModeScreen::instance();
     taskManager.scheduleFixedRate(500, &screen);
+
+    currentScreenController = &pidScreenController;
+
+    previousScreen = currentScreen;
+    currentScreen = pid;
 }
 
 void Controller::switchToDirect() {
-
+    previousScreen = currentScreen;
+    currentScreen = direct;
 }
 
 void Controller::switchToMenu() {
+    previousScreen = currentScreen;
+    currentScreen = menu;
+}
 
+void Controller::switchToThermometer() {
+    previousScreen = currentScreen;
+    currentScreen = thermometer;
 }
 
 void Controller::encoderLeft() {
-
+    currentScreenController->goLeft();
 }
 
 void Controller::encoderRight() {
-
+    currentScreenController->goRight();
 }
 
 void Controller::encoderPressed() {
+    currentScreenController->click();
+}
 
+void Controller::button1Pressed() {
+    Serial.print("button 1");
+    Serial.println();
+}
+
+void Controller::button2Pressed() {
+    Serial.print("button 2");
+    Serial.println();
+}
+
+void Controller::button3Pressed() {
+
+}
+
+void Controller::button4Pressed() {
+    if(currentScreen != menu) {
+        switchToMenu();
+    } else {
+        switch(previousScreen) {
+            case pid: switchToPID(); break;
+            case direct: switchToDirect(); break;
+            case thermometer: switchToThermometer(); break;
+            default: switchToPID(); break;
+        }
+    }
 }

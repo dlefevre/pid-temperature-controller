@@ -86,3 +86,56 @@ char * AbstractScreen::fmtTime(int hours, int minutes, int seconds) {
 char * AbstractScreen::fmtTime(long time) {
     return fmtTime(time / 3600, time % 3600 / 60, time % 60);
 }
+
+/*
+ * Set the cursor position
+ */
+void AbstractScreen::setSelectorPosition(int pos) {
+    selectorPosition = pos;
+}
+
+/*
+ * Define if it should be rendered as an editable field
+ */
+void AbstractScreen::setSelectorEditable(bool editable) {
+    selectorEditable = editable;
+}
+
+/*
+ * Check if a selector is editable
+ */
+bool AbstractScreen::getSelectorEditable() {
+    return selectorEditable;
+}
+
+/*
+ * Retrieve the selector's position
+ */
+int AbstractScreen::getSelectorPosition() {
+    return selectorPosition;
+}
+
+/*
+ * Move the selector down
+ */
+void AbstractScreen::moveSelectorDown() {
+    if(selectorPosition > 0) {
+        --selectorPosition;
+    }
+}
+
+/*
+ * Move the selector up
+ */
+void AbstractScreen::moveSelectorUp() {
+    if(selectorPosition < selectorMax) {
+        ++selectorPosition;
+    }
+}
+
+/*
+ * Set the maximum position
+ */
+void AbstractScreen::setSelectorMax(int max) {
+    selectorMax = max;
+}

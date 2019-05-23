@@ -12,7 +12,7 @@ char buf[21];
  * Constructor
  */
 PidModeScreen::PidModeScreen() {
-
+    setSelectorMax(2);
 }
 
 /*
@@ -49,15 +49,30 @@ void PidModeScreen::renderAlarm() {
 }
 
 /*
+ * Render cursor
+ */
+void PidModeScreen::renderSelector() {
+    Serial.print((unsigned int)(void *)this);
+    Serial.println();
+    for(int i=0; i<3; ++i) {
+        lcd.setCursor(0, i);
+        if(i == selectorPosition) {
+            lcd.print(selectorEditable ? ">>" : "* ");
+        } else {
+            lcd.print("  ");
+        }
+    }
+    
+}
+
+/*
  * Render screen
  */
 void PidModeScreen::render() {
-    lcd.setCursor(0, 0);
-    lcd.print("*");
-
     renderSetPoint();
     renderTemperature();
     renderAlarm();
+    renderSelector();
 
     lcd.setCursor(2, 2);
     lcd.print("M: PID");
