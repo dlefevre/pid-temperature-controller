@@ -4,19 +4,18 @@
 
 #include "AbstractScreen.h"
 #include "Config.h"
+#include "LcdContainer.h"
 
 /*
  * Constructor
  */
-AbstractScreen::AbstractScreen() : 
-    lcd(LCD_RS, LCD_EN, LCD_D4, LCD_D5, LCD_D6, LCD_D7) {
-    lcd.begin(4,20); 
+AbstractScreen::AbstractScreen() : lcd(LcdContainer::instance().getLCD()) {
 }
 
 /*
  * Format a whole number (positive only)
  */
-char * fmtWhole(int value) {
+char * fmtWhole(long value) {
     static char buf[10];
     char * ptr = &buf[9];
 
@@ -114,8 +113,8 @@ void AbstractScreen::setSelectorPosition(int pos) {
     selectorPosition = pos;
     if(selectorPosition < firstVisibleLine) {
         firstVisibleLine = selectorPosition;
-    } else if (selectorPosition > firstVisibleLine + 4) {
-        firstVisibleLine = selectorPosition - 4;
+    } else if (selectorPosition > firstVisibleLine + 3) {
+        firstVisibleLine = selectorPosition - 3;
     }
 }
 
@@ -158,8 +157,8 @@ void AbstractScreen::moveSelectorDown() {
 void AbstractScreen::moveSelectorUp() {
     if(selectorPosition < selectorMax) {
         ++selectorPosition;
-        if(selectorPosition > firstVisibleLine + 4) {
-            firstVisibleLine = selectorPosition - 4;
+        if(selectorPosition > firstVisibleLine + 3) {
+            firstVisibleLine = selectorPosition - 3;
         }
     }
 }
@@ -184,4 +183,11 @@ void AbstractScreen::renderSelector() {
         }
     }
     
+}
+
+/*
+ * Clear screen
+ */
+void AbstractScreen::clear() {
+    lcd.clear();
 }

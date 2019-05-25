@@ -1,14 +1,14 @@
 /*
- * Controller actions for Pid Screen
+ * Controller actions for Menu Screen
  */
 
-#ifndef __PIDSCREENCONTROLLER_H__
-#define __PIDSCREENCONTROLLER_H__
+#ifndef __MENUSCREENCONTROLLER_H__
+#define __MENUSCREENCONTROLLER_H__
 
 #include "Constants.h"
 #include "AbstractScreenController.h"
 
-class PidScreenController : public AbstractScreenController {
+class MenuScreenController : public AbstractScreenController {
     public:
         void goLeft() override;
         void goRight() override;

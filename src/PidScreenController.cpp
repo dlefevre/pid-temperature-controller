@@ -8,8 +8,6 @@
 #include "Alarm.h"
 #include "PidTask.h"
 
-PidScreenController::PidScreenController() {
-}
 
 void PidScreenController::goLeft() {
     static PidModeScreen &screen = PidModeScreen::instance();

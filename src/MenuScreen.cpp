@@ -17,16 +17,17 @@ void MenuScreen::renderLine(int line, const char *title, const char *val) {
         *(ptr++) = *(title++);
     } while(*title != '\0');
     
-    int n = 18 - (ptr - buffer) + strlen(val);
-    for(int i=0; i<n;  ++i)
+    int n = 18 - (ptr - buffer) - strlen(val);
+    for(int i=0; i<n;  ++i) {
         *ptr++ = ' ';
-    
+    }
+
     do {
         *(ptr++) = *(val++);
     } while(*val != '\0');
     *ptr = '\0';
 
-    lcd.setCursor(line, 2);
+    lcd.setCursor(2, line);
     lcd.print(buffer);
 }
 
@@ -34,7 +35,7 @@ void MenuScreen::renderLine(int line, const char *title, const char *val) {
  * Constructor
  */
 MenuScreen::MenuScreen() {
-    setSelectorMax(10);
+    setSelectorMax(9);
 }
 
 /*
@@ -44,30 +45,31 @@ void MenuScreen::renderSelector() {
  * Render screen
  */
 void MenuScreen::render() {
-    for(int i=0; i<4; ++i) {
+    int n = firstVisibleLine + 4;
+    for(int i=firstVisibleLine; i<n; ++i) {
         renderMenuItem(i);
     }
     renderSelector();
 }
 
 /*
- * Render a single menu item (identified by the line on the screen)line
+ * Render a single menu item (identified by the line relative to the menu)line
  */
 void MenuScreen::renderMenuItem(int line) {
     static PidTask & pt = PidTask::instance();
     static TemperatureProbe & probe = TemperatureProbe::instance();
     static SerialTask & st = SerialTask::instance();
 
-    switch(firstVisibleLine + line) {
+    switch(line) {
         case 0: renderLine(line, "Kp", fmtDec(pt.getKp())); break;
         case 1: renderLine(line, "Ki", fmtDec(pt.getKi())); break;
         case 2: renderLine(line, "Kd", fmtDec(pt.getKd())); break;
-        case 3: renderLine(line, "PID Max.", fmtWhole(pt.getMaxPower())); break;
-        case 4: renderLine(line, "Direct Max.", fmtWhole(0)); break;
-        case 5: renderLine(line, "Cal. 25", fmtDec(probe.getCalibrationPoint25())); break;
-        case 6: renderLine(line, "Cal. 75", fmtDec(probe.getCalibrationPoint75())); break;
-        case 7: renderLine(line, "Serial", st.isEnabled() ? "On" : "Off");
-        case 8: renderLine(line, "Baud", fmtWhole(st.getBaud()));
-        case 9: renderLine(line, "----- Save -----", "");
+        case 3: renderLine(line, "PID Max.", fmtWhole((long)pt.getMaxPower())); break;
+        case 4: renderLine(line, "Direct Max.", fmtWhole(0L)); break;
+        case 5: renderLine(line, "Cal. 25", fmtWhole(probe.getCalibrationPoint25())); break;
+        case 6: renderLine(line, "Cal. 75", fmtWhole(probe.getCalibrationPoint75())); break;
+        case 7: renderLine(line, "Serial", st.isEnabled() ? "On" : "Off"); break;
+        case 8: renderLine(line, "Baud", fmtWhole(st.getBaud())); break;
+        case 9: renderLine(line, "----- Save -----", ""); break;
     }
 }

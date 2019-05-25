@@ -8,6 +8,7 @@
 
 #include "Constants.h"
 #include "PidScreenController.h"
+#include "MenuScreenController.h"
 
 class Controller {
     public:
@@ -34,6 +35,11 @@ class Controller {
 
         AbstractScreenController * currentScreenController;
         PidScreenController pidScreenController;
+        MenuScreenController menuScreenController;
+
+        uint8_t screenTask;
+        void cancelScreenTask();
+        void scheduleScreen(AbstractScreen &);
 };
 
 Controller& Controller::instance() {

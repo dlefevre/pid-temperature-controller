@@ -22,9 +22,11 @@ class AbstractScreen : public Executable {
         void moveSelectorUp();
         void moveSelectorDown();
         void renderSelector();
+        void clear();
 
     protected:
-        LiquidCrystal lcd;
+        LiquidCrystal &lcd;
+
         int selectorPosition;
         int selectorMax;
         bool selectorEditable;
@@ -48,6 +50,6 @@ char * fmtDec(long value);
 char * fmtDec(double value);
 char * fmtTime(int hours, int minutes, int seconds);
 char * fmtTime(unsigned long time);
-char * fmtWhole(int value);
+char * fmtWhole(long value);
 
 #endif

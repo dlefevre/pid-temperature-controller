@@ -5,14 +5,35 @@
 
 #include "Controller.h"
 #include "PidModeScreen.h"
+#include "MenuScreen.h"
 #include <IoAbstraction.h>
 #include "Alarm.h"
 #include "PidTask.h"
 
+/*
+ * Cancel the scheduled task that refreshes the screen.
+ */
+void Controller::cancelScreenTask() {
+    if(screenTask) {
+        taskManager.cancelTask(screenTask);
+        screenTask = 0;
+    }
+}
+
+/*
+ * Schedule a new task for refreshing the screen
+ */
+void Controller::scheduleScreen(AbstractScreen &screen) {
+    cancelScreenTask();
+    screen.clear();
+    screen.render();
+    screenTask = taskManager.scheduleFixedRate(SCREEN_REFRESH, &screen);
+}
+
 void Controller::switchToPID(){
     static PidModeScreen &screen = PidModeScreen::instance();
-    taskManager.scheduleFixedRate(500, &screen);
-
+    
+    scheduleScreen(screen);
     currentScreenController = &pidScreenController;
 
     previousScreen = currentScreen;
@@ -25,6 +46,11 @@ void Controller::switchToDirect() {
 }
 
 void Controller::switchToMenu() {
+    static MenuScreen &screen = MenuScreen::instance();
+
+    scheduleScreen(screen);
+    currentScreenController = &menuScreenController;
+
     previousScreen = currentScreen;
     currentScreen = menu;
 }

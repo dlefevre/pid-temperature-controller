@@ -56,4 +56,7 @@
 // Heating window
 #define HEATING_WINDOW 2000.0
 
+// Minimal screen refresh timeout
+#define SCREEN_REFRESH 500
+
 #endif

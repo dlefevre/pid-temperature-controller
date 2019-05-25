@@ -36,6 +36,7 @@ bool SerialTask::isEnabled() {
 }
 
 long SerialTask::getBaud() {
+    Serial.println(baud);
     return baud;
 }
 
