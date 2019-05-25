@@ -2,14 +2,17 @@
  * PID Temperature Controller for a RIMS setup.
  */
 
+#include "Constants.h"
 #include <Wire.h>
 #include <IoAbstraction.h>
 #include "Controller.h"
 #include "TemperatureProbe.h"
-#include "Constants.h"
 #include "Config.h"
 #include "Buttons.h"
 #include "Alarm.h"
+#include "PidTask.h"
+#include "Heater.h"
+#include "SerialTask.h"
 
 Controller &controller = Controller::instance();
 
@@ -50,10 +53,8 @@ void setup() {
     analogReference(EXTERNAL);
 
     // Set up serial console
-    if(Config::getSerialOn()) {
-        Serial.begin(Config::getSerialBaud());
-        Serial.println("PID Temperature Controller");
-    }
+    SerialTask &st = SerialTask::instance();
+    taskManager.scheduleFixedRate(1000, &st);
 
     // Set up rotary encoder
     switches.initialise(ioUsingArduino(), INPUT_PULLUP);
@@ -72,6 +73,14 @@ void setup() {
     // Schedule the alarm
     Alarm &alarm = Alarm::instance();
     taskManager.scheduleFixedRate(1000, &alarm);
+
+    // Schedule the PID task
+    PidTask &pi = PidTask::instance();
+    taskManager.scheduleFixedRate(5, &pi);
+
+    // Schedule the Heater
+    Heater &heater = Heater::instance();
+    taskManager.scheduleFixedRate(1, &heater);
 
     // Switch to first screen
     controller.switchToPID();

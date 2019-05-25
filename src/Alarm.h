@@ -5,8 +5,8 @@
 #ifndef __ALARM_H__
 #define __ALARM_H__
 
-#include <IoAbstraction.h>
 #include "Constants.h"
+#include <IoAbstraction.h>
 
 class Alarm : public Executable {
     public:

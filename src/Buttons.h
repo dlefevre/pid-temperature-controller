@@ -5,6 +5,7 @@
 #ifndef __BUTTONS_H__
 #define __BUTTONS_H__
 
+#include "Constants.h"
 #include <IoAbstraction.h>
 #include "AnalogButtons.h"
 #include "Config.h"

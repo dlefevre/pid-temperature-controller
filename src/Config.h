@@ -28,9 +28,9 @@ class Config {
         static void setDirectMaxPower(int);
         static void setSerialOn(bool);
         static void setSerialBaud(long); 
+        static void save();
 
     private:
-        static void save();
         static void load();
         static void initialize();
         static void verify();

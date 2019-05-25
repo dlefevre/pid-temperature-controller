@@ -5,9 +5,7 @@
 #include "PidModeScreen.h"
 #include "TemperatureProbe.h"
 #include "Alarm.h"
-
-// Buffer for sprintf
-char buf[21];
+#include "PidTask.h"
 
 /*
  * Constructor
@@ -20,12 +18,10 @@ PidModeScreen::PidModeScreen() {
  * Render set point
  */
 void PidModeScreen::renderSetPoint() {
-  
-    // TODO: Fetch and convert setpoint
-
+    static PidTask &pi = PidTask::instance();
     lcd.setCursor(2, 0);
     lcd.print("S:");
-    lcd.print(fmtDec(0));
+    lcd.print(fmtDec(pi.getSetPoint()));
 }
 
 /*
@@ -48,21 +44,6 @@ void PidModeScreen::renderAlarm() {
     lcd.setCursor(2, 1);
     lcd.print("A: ");
     lcd.print(fmtTime(alarm.getTime()));
-}
-
-/*
- * Render cursor
- */
-void PidModeScreen::renderSelector() {
-    for(int i=0; i<3; ++i) {
-        lcd.setCursor(0, i);
-        if(i == selectorPosition) {
-            lcd.print(selectorEditable ? ">>" : "* ");
-        } else {
-            lcd.print("  ");
-        }
-    }
-    
 }
 
 /*

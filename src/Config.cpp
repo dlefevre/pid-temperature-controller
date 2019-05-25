@@ -24,7 +24,20 @@ long Config::serialBaud;
  * Save changes to EEPROM
  */
 void Config::save() {
+    int address = 0;
 
+    for(int i=0; i<3; ++i) {
+        EEPROM.updateByte(address++, expectedId[i]);
+    }
+
+    EEPROM.updateByte(address++, (byte)serialOn);
+    EEPROM.updateLong(address, serialBaud);             address += sizeof(long);
+    EEPROM.updateInt(address, probeCalibrationPoint25); address += sizeof(int);   
+    EEPROM.updateDouble(address, pidKp);                address += sizeof(double); 
+    EEPROM.updateDouble(address, pidKi);                address += sizeof(double); 
+    EEPROM.updateDouble(address, pidKd);                address += sizeof(double); 
+    EEPROM.updateInt(address, pidMaxPower);             address += sizeof(int);
+    EEPROM.updateInt(address, directMaxPower);          address += sizeof(int);
 }
 
 /*
@@ -49,7 +62,7 @@ void Config::load() {
     pidKi                   = EEPROM.readDouble(address); address += sizeof(double); 
     pidKd                   = EEPROM.readDouble(address); address += sizeof(double);
     pidMaxPower             = EEPROM.readInt(address);    address += sizeof(int);
-    directMaxPower            = EEPROM.readInt(address);    address += sizeof(int);
+    directMaxPower          = EEPROM.readInt(address);    address += sizeof(int);
     
     loaded = true;
 }
@@ -133,45 +146,36 @@ long Config::getSerialBaud() {
 
 void Config::setProbeCalibrationPoint25(int value) {
     probeCalibrationPoint25 = value;
-    save();
 }
 
 void Config::setprobeCalibrationPoint75(int value) {
     probeCalibrationPoint75 = value;
-    save();
 }
 
 void Config::setPidKp(double value) {
     pidKp = value;
-    save();
 }
 
 void Config::setPidKi(double value) {
     pidKi = value;
-    save();
 }
 
 void Config::setPidKd(double value) {
     pidKd = value;
-    save();
 }
 
 void Config::setPidMaxPower(int value) {
     pidMaxPower = value;
-    save();
 }
 
 void Config::setDirectMaxPower(int value) {
     directMaxPower = value;
-    save();
 }
 
 void Config::setSerialOn(bool value) {
     serialOn = value;
-    save();
 }
 
 void Config::setSerialBaud(long value) { 
     serialBaud = value;
-    save();
 }

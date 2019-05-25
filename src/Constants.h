@@ -36,7 +36,7 @@
 
 // Other pins
 #define HEATER_PIN 11
-#define ACTIVEPIN 12
+#define ACTIVE_PIN 12
 #define PIEZO_PIN 13
 
 // Some magic macros
@@ -48,9 +48,12 @@
 #define DEFAULT_PIDKp 2
 #define DEFAULT_PIDKi 5
 #define DEFAULT_PIDkd 1
-#define DEFAULT_PIDMAXPOWER 75
-#define DEFAULT_DIRECTMAXPOWER 75
+#define DEFAULT_PIDMAXPOWER 80
+#define DEFAULT_DIRECTMAXPOWER 80
 #define DEFAULT_SERIALON true
 #define DEFAULT_SERIALBAUD 115200L
+
+// Heating window
+#define HEATING_WINDOW 2000.0
 
 #endif

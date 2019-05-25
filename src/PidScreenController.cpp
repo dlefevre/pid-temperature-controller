@@ -6,6 +6,7 @@
 
 #include "PidModeScreen.h"
 #include "Alarm.h"
+#include "PidTask.h"
 
 PidScreenController::PidScreenController() {
 }
@@ -18,9 +19,14 @@ void PidScreenController::goLeft() {
     } else {
         switch(screen.getSelectorPosition()) {
             case 0: 
+                static PidTask &pt = PidTask::instance();
+                if(pt.getSetPoint() > 0) {
+                    pt.setSetPoint(pt.getSetPoint() - 500);
+                    screen.renderSetPoint();
+                }
                 break;
             case 1:
-                static Alarm & alarm = Alarm::instance();
+                static Alarm &alarm = Alarm::instance();
                 if(alarm.getTime() >= 60) { 
                     alarm.setTime(alarm.getTime() - 60);
                     screen.renderAlarm();
@@ -38,6 +44,11 @@ void PidScreenController::goRight() {
     } else {
         switch(screen.getSelectorPosition()) {
             case 0: 
+                static PidTask &pt = PidTask::instance();
+                if(pt.getSetPoint() < 90000) {
+                    pt.setSetPoint(pt.getSetPoint() + 500);
+                    screen.renderSetPoint();
+                }
                 break;
             case 1:
                 static Alarm & alarm = Alarm::instance();

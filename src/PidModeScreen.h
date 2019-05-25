@@ -18,7 +18,6 @@ class PidModeScreen : public AbstractScreen {
         void renderSetPoint();
         void renderTemperature();
         void renderAlarm();
-        void renderSelector();
         
     private:
 

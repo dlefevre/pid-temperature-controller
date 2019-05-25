@@ -7,6 +7,7 @@
 #include "PidModeScreen.h"
 #include <IoAbstraction.h>
 #include "Alarm.h"
+#include "PidTask.h"
 
 void Controller::switchToPID(){
     static PidModeScreen &screen = PidModeScreen::instance();
@@ -46,8 +47,8 @@ void Controller::encoderPressed() {
 }
 
 void Controller::button1Pressed() {
-    Serial.print("button 1");
-    Serial.println();
+    static PidTask &pt = PidTask::instance();
+    pt.toggle();
 }
 
 void Controller::button2Pressed() {

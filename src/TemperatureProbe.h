@@ -6,9 +6,9 @@
 #ifndef __TEMPERATUREPROBE_H__
 #define __TEMPERATUREPROBE_H__
 
+#include "Constants.h"
 #include <IoAbstraction.h>
 #include <Filter.h>
-#include "Constants.h"
 
 class TemperatureProbe : public Executable {
     public:
@@ -19,15 +19,28 @@ class TemperatureProbe : public Executable {
         int getUnfilteredRaw();      // Return raw unfiltered analog value.
         int getFilteredRaw();        // Return smoothed raw value.
         inline void exec() override FORCE_INLINE;
+        inline long getCalibrationPoint25() FORCE_INLINE;
+        inline long getCalibrationPoint75() FORCE_INLINE;
+        void setCalibrationPoint25(long);
+        void setCalibrationPoint75(long);
         
     private:
         int raw;                           // Raw analog value
         ExponentialFilter<long> smooth;    // First level of smoothing to filter out noise
+        long x0, x1;
 };
 
 TemperatureProbe& TemperatureProbe::instance() {
     static TemperatureProbe one;
     return one;
+}
+
+long TemperatureProbe::getCalibrationPoint25() {
+    return x0;
+}
+
+long TemperatureProbe::getCalibrationPoint75() {
+    return x1;
 }
 
 #endif

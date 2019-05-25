@@ -3,6 +3,7 @@
  */
 
 #include "AbstractScreen.h"
+#include "Config.h"
 
 /*
  * Constructor
@@ -13,15 +14,26 @@ AbstractScreen::AbstractScreen() :
 }
 
 /*
- * default.
+ * Format a whole number (positive only)
  */
-void AbstractScreen::render() {
+char * fmtWhole(int value) {
+    static char buf[10];
+    char * ptr = &buf[9];
+
+    *(ptr) = '\0';
+    do {
+        *(--ptr) = value % 10 + '0';
+        value /= 10;
+    } while(value > 0);
+    
+    return ptr;
 }
 
 /*
- * Format a deciman number xx.x
+ * Format a decimal number xx.x
  */
-char * AbstractScreen::fmtDec(int whole, int fraction) {
+char * fmtDec(int whole, int fraction) {
+    static char buf[10];
     char * ptr = buf;
     int mag = 100;
 
@@ -51,14 +63,22 @@ char * AbstractScreen::fmtDec(int whole, int fraction) {
  * Convert value * 1000 to a whole and fractional part,
  * and return a formatted string
  */
-char * AbstractScreen::fmtDec(long value) {
+char * fmtDec(long value) {
     return fmtDec(value / 1000, value % 1000 / 100);
+}
+
+/*
+ * Format a regular double
+ */
+char * fmtDec(double value) {
+    return fmtDec((long)value, (long)(value * 10) % 10);
 }
 
 /*
  * Return a formatted string hh::mm::ss
  */
-char * AbstractScreen::fmtTime(int hours, int minutes, int seconds) {
+char * fmtTime(int hours, int minutes, int seconds) {
+    static char buf[10];
     char * ptr = buf;
 
     if(hours > 99) {
@@ -83,7 +103,7 @@ char * AbstractScreen::fmtTime(int hours, int minutes, int seconds) {
 /*
  * Convert seconds to a formatted string.
  */
-char * AbstractScreen::fmtTime(unsigned long time) {
+char * fmtTime(unsigned long time) {
     return fmtTime(time / 3600, time % 3600 / 60, time % 60);
 }
 
@@ -92,6 +112,11 @@ char * AbstractScreen::fmtTime(unsigned long time) {
  */
 void AbstractScreen::setSelectorPosition(int pos) {
     selectorPosition = pos;
+    if(selectorPosition < firstVisibleLine) {
+        firstVisibleLine = selectorPosition;
+    } else if (selectorPosition > firstVisibleLine + 4) {
+        firstVisibleLine = selectorPosition - 4;
+    }
 }
 
 /*
@@ -121,6 +146,9 @@ int AbstractScreen::getSelectorPosition() {
 void AbstractScreen::moveSelectorDown() {
     if(selectorPosition > 0) {
         --selectorPosition;
+        if(selectorPosition < firstVisibleLine) {
+            firstVisibleLine = selectorPosition;
+        }
     }
 }
 
@@ -130,6 +158,9 @@ void AbstractScreen::moveSelectorDown() {
 void AbstractScreen::moveSelectorUp() {
     if(selectorPosition < selectorMax) {
         ++selectorPosition;
+        if(selectorPosition > firstVisibleLine + 4) {
+            firstVisibleLine = selectorPosition - 4;
+        }
     }
 }
 
@@ -138,4 +169,19 @@ void AbstractScreen::moveSelectorUp() {
  */
 void AbstractScreen::setSelectorMax(int max) {
     selectorMax = max;
+}
+
+/*
+ * Render cursor
+ */
+void AbstractScreen::renderSelector() {
+    for(int i=0; i<4; ++i) {
+        lcd.setCursor(0, i);
+        if(i == selectorPosition - firstVisibleLine) {
+            lcd.print(selectorEditable ? ">>" : "* ");
+        } else {
+            lcd.print("  ");
+        }
+    }
+    
 }
