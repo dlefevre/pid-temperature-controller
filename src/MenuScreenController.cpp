@@ -22,8 +22,6 @@
  *  - Set Baud rate
  */
 
-template<typename T> T modify(T value, T delta, T min, T max);
-
 void MenuScreenController::goLeft() {
     static MenuScreen &screen = MenuScreen::instance();
     static SerialTask &st = SerialTask::instance();
@@ -35,10 +33,10 @@ void MenuScreenController::goLeft() {
         screen.render();
     } else {
         switch(screen.getSelectorPosition()) {
-            case 0: pt.setKp(modify<double>(pt.getKp(), -1.0, 0.0, 100.0)); break;
-            case 1: pt.setKi(modify<double>(pt.getKi(), -1.0, 0.0, 100.0)); break;
-            case 2: pt.setKd(modify<double>(pt.getKd(), -1.0, 0.0, 100.0)); break;
-            case 3: pt.setMaxPower(modify<int>(pt.getMaxPower(), -1, 0, 0)); break;
+            case 0: pt.setKp(modify<double>(pt.getKp(), -0.1, 0.0, 100.0)); break;
+            case 1: pt.setKi(modify<double>(pt.getKi(), -0.1, 0.0, 100.0)); break;
+            case 2: pt.setKd(modify<double>(pt.getKd(), -0.1, 0.0, 100.0)); break;
+            case 3: pt.setMaxPower(modify<int>(pt.getMaxPower(), -1, 0, 100)); break;
             case 4: break;
             case 5: probe.setCalibrationPoint25(modify<long>(probe.getCalibrationPoint25(), -1l, 0l, 1023l)); break;
             case 6: probe.setCalibrationPoint75(modify<long>(probe.getCalibrationPoint75(), -1l, 0l, 1023l)); break;
@@ -72,10 +70,10 @@ void MenuScreenController::goRight() {
         screen.render();
     } else {
         switch(screen.getSelectorPosition()) {
-            case 0: pt.setKp(modify<double>(pt.getKp(), 1.0, 0.0, 100.0)); break;
-            case 1: pt.setKi(modify<double>(pt.getKi(), 1.0, 0.0, 100.0)); break;
-            case 2: pt.setKd(modify<double>(pt.getKd(), 1.0, 0.0, 100.0)); break;
-            case 3: pt.setMaxPower(modify<int>(pt.getMaxPower(), 1, 0, 0)); break;
+            case 0: pt.setKp(modify<double>(pt.getKp(), 0.1, 0.0, 100.0)); break;
+            case 1: pt.setKi(modify<double>(pt.getKi(), 0.1, 0.0, 100.0)); break;
+            case 2: pt.setKd(modify<double>(pt.getKd(), 0.1, 0.0, 100.0)); break;
+            case 3: pt.setMaxPower(modify<int>(pt.getMaxPower(), 1, 0, 100)); break;
             case 4: break;
             case 5: probe.setCalibrationPoint25(modify<long>(probe.getCalibrationPoint25(), 1l, 0l, 1023l)); break;
             case 6: probe.setCalibrationPoint75(modify<long>(probe.getCalibrationPoint75(), 1l, 0l, 1023l)); break;
@@ -107,16 +105,24 @@ void MenuScreenController::click() {
             screen.setSelectorEditable(false);
         } else {
             screen.setSelectorEditable(true);
+            multiplier = 1;
         }
         screen.renderSelector();
+    }
+}
+
+void MenuScreenController::longClick() {
+    static MenuScreen &screen = MenuScreen::instance();
+    if(screen.getSelectorEditable()) {
+        multiplier = 100;
     }
 }
 
 /*
  * Helper functions
  */
-template<typename T> T modify(T value, T delta, T min, T max) {
-    value += delta;
+template<typename T> T MenuScreenController::modify(T value, T delta, T min, T max) {
+    value += delta * multiplier;
     if(value < min) {
         return min;
     }

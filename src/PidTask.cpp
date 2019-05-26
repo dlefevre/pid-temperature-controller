@@ -8,6 +8,14 @@
 #include "Heater.h"
 
 /*
+ * Return the sole instance
+ */
+PidTask & PidTask::instance() {
+    static PidTask one;
+    return one;
+}
+
+/*
  * Constructor
  */
 PidTask::PidTask() :
@@ -17,7 +25,7 @@ PidTask::PidTask() :
     ki(Config::getPidKi()),
     kd(Config::getPidKd()),
     maxPower(Config::getPidMaxPower()),
-    pid(&input, &output, &setPoint, kp, ki, kd, DIRECT) {
+    pid(&input, &output, &setPoint, kp, ki, kd, P_ON_M, DIRECT) {
     pid.SetOutputLimits(0.0, HEATING_WINDOW * maxPower / 100);
 }
 

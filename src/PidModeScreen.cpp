@@ -6,6 +6,15 @@
 #include "TemperatureProbe.h"
 #include "Alarm.h"
 #include "PidTask.h"
+#include "Heater.h"
+
+/*
+ * Fetch and/or create instance
+ */
+PidModeScreen& PidModeScreen::instance() {
+    static PidModeScreen one;
+    return one;
+}
 
 /*
  * Constructor
@@ -50,6 +59,8 @@ void PidModeScreen::renderAlarm() {
  * Render screen
  */
 void PidModeScreen::render() {
+    static Heater &heater = Heater::instance();
+
     renderSetPoint();
     renderTemperature();
     renderAlarm();
@@ -57,6 +68,14 @@ void PidModeScreen::render() {
 
     lcd.setCursor(2, 2);
     lcd.print("M: PID");
+
     lcd.setCursor(2, 3);
-    lcd.print("I: Active @ 0%  ");
+    if(heater.isActive()) {
+        lcd.print("I: running @");
+        lcd.print(fmtDec(heater.getPower()));
+        lcd.print("%");
+    } else {
+        lcd.print("I: disabled       ");
+    }
+    
 }

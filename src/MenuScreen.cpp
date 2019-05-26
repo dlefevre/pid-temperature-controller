@@ -9,6 +9,17 @@
 #include "TemperatureProbe.h"
 #include "SerialTask.h"
 
+/*
+ * Fetch and/or create instance
+ */
+MenuScreen& MenuScreen::instance() {
+    static MenuScreen one;
+    return one;
+}
+
+/*
+ * Render a single line on screen.
+ */
 void MenuScreen::renderLine(int line, const char *title, const char *val) {
     static char buffer[21];
     char *ptr = buffer;
@@ -39,9 +50,6 @@ MenuScreen::MenuScreen() {
 }
 
 /*
-void MenuScreen::renderSelector() {
-
-}
  * Render screen
  */
 void MenuScreen::render() {
@@ -55,12 +63,13 @@ void MenuScreen::render() {
 /*
  * Render a single menu item (identified by the line relative to the menu)line
  */
-void MenuScreen::renderMenuItem(int line) {
+void MenuScreen::renderMenuItem(int item) {
     static PidTask & pt = PidTask::instance();
     static TemperatureProbe & probe = TemperatureProbe::instance();
     static SerialTask & st = SerialTask::instance();
+    int line = item - firstVisibleLine;
 
-    switch(line) {
+    switch(item) {
         case 0: renderLine(line, "Kp", fmtDec(pt.getKp())); break;
         case 1: renderLine(line, "Ki", fmtDec(pt.getKi())); break;
         case 2: renderLine(line, "Kd", fmtDec(pt.getKd())); break;

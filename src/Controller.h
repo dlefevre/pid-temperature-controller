@@ -9,19 +9,22 @@
 #include "Constants.h"
 #include "PidScreenController.h"
 #include "MenuScreenController.h"
+#include "ModeScreenController.h"
+#include "ThermometerScreenController.h"
 
 class Controller {
     public:
-        static inline Controller& instance() FORCE_INLINE;
+        static Controller& instance();
 
         void switchToPID();
-        void switchToDirect();
+        void switchToMode();
         void switchToThermometer();
         void switchToMenu();
 
         void encoderLeft();
         void encoderRight();
         void encoderPressed();
+        void encoderLongPressed();
 
         void button1Pressed();
         void button2Pressed();
@@ -29,22 +32,19 @@ class Controller {
         void button4Pressed();
 
     private:
-        enum Screen {pid, direct, thermometer, menu, mode};
+        enum Screen {pid, thermometer, menu, mode};
         Screen currentScreen;
         Screen previousScreen;
 
         AbstractScreenController * currentScreenController;
         PidScreenController pidScreenController;
         MenuScreenController menuScreenController;
+        ModeScreenController modeScreenController;
+        ThermometerScreenController thermometerScreenController;
 
         uint8_t screenTask;
         void cancelScreenTask();
         void scheduleScreen(AbstractScreen &);
 };
-
-Controller& Controller::instance() {
-    static Controller one;
-    return one;
-}
 
 #endif

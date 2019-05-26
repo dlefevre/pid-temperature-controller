@@ -12,6 +12,14 @@ void button3Pressed();
 void button4Pressed();
 
 /*
+ * Return the sole instance
+ */
+Buttons & Buttons::instance() {
+    static Buttons one;
+    return one;
+}
+
+/*
  * Constructor 
  */
 Buttons::Buttons() : 

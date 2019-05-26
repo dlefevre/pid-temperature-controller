@@ -12,7 +12,7 @@
 
 class TemperatureProbe : public Executable {
     public:
-        static inline TemperatureProbe& instance() FORCE_INLINE;
+        static TemperatureProbe& instance();
 
         TemperatureProbe();
         long getTemperature();        // Return temperature in degrees Celcius * 1000
@@ -29,11 +29,6 @@ class TemperatureProbe : public Executable {
         ExponentialFilter<long> smooth;    // First level of smoothing to filter out noise
         long x0, x1;
 };
-
-TemperatureProbe& TemperatureProbe::instance() {
-    static TemperatureProbe one;
-    return one;
-}
 
 long TemperatureProbe::getCalibrationPoint25() {
     return x0;

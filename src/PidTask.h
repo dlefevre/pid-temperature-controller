@@ -11,7 +11,7 @@
 
 class PidTask : public Executable {
     public:
-        static inline PidTask & instance() FORCE_INLINE;
+        static PidTask & instance();
 
         PidTask();
         void setKp(double);
@@ -40,15 +40,11 @@ class PidTask : public Executable {
         double kd;
         bool   active;
         int    maxPower;
+
                 
         PID pid;
 
 };
-
-PidTask & PidTask::instance() {
-    static PidTask one;
-    return one;
-}
 
 /*
  * Define the setpoint (degrees Celcius * 1000)

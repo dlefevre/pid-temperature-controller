@@ -11,7 +11,7 @@
 
 class MenuScreen : public AbstractScreen {
     public:
-        static inline MenuScreen& instance() FORCE_INLINE;
+        static MenuScreen& instance();
 
         MenuScreen();
         void render() override;
@@ -20,13 +20,5 @@ class MenuScreen : public AbstractScreen {
         
     private:
 };
-
-/*
- * Fetch and/or create instance
- */
-MenuScreen& MenuScreen::instance() {
-    static MenuScreen one;
-    return one;
-}
 
 #endif

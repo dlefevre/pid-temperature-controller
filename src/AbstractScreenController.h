@@ -15,6 +15,7 @@ class AbstractScreenController {
         virtual void goLeft() = 0;
         virtual void goRight() = 0;
         virtual void click() = 0;
+        virtual void longClick() {};
 
 };
 

@@ -10,7 +10,7 @@
 
 class SerialTask : public Executable {
     public:
-        static inline SerialTask & instance() FORCE_INLINE;
+        static SerialTask & instance();
 
         void exec() override;
 
@@ -24,19 +24,18 @@ class SerialTask : public Executable {
     private:
         bool enabled;
         long baud;
-};
 
-SerialTask & SerialTask::instance() {
-    static SerialTask one;
-    return one;
-}
+        long setPoint;
+        long temperature;
+        long power;
+        int maxPower;
+};
 
 bool SerialTask::isEnabled() {
     return enabled;
 }
 
 long SerialTask::getBaud() {
-    Serial.println(baud);
     return baud;
 }
 

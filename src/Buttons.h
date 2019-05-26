@@ -12,7 +12,7 @@
 
 class Buttons : public AnalogButtons, public Executable {
     public:
-        static inline Buttons & instance() FORCE_INLINE;
+        static Buttons & instance();
         Buttons();
 
         inline void exec() override FORCE_INLINE;
@@ -23,10 +23,5 @@ class Buttons : public AnalogButtons, public Executable {
         Button button3;
         Button button4;
 };
-
-Buttons & Buttons::instance() {
-    static Buttons one;
-    return one;
-}
 
 #endif

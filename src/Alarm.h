@@ -10,7 +10,7 @@
 
 class Alarm : public Executable {
     public:
-        static inline Alarm & instance() FORCE_INLINE;
+        static Alarm & instance();
 
         inline void setTime(unsigned long) FORCE_INLINE;
         inline unsigned long getTime() FORCE_INLINE;
@@ -22,11 +22,6 @@ class Alarm : public Executable {
         unsigned long time;
         bool enabled;
 };
-
-Alarm & Alarm::instance() {
-    static Alarm one;
-    return one;
-}
 
 void Alarm::setTime(unsigned long val) {
     time = val;

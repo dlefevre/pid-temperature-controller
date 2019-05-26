@@ -6,9 +6,20 @@
 #include "Controller.h"
 #include "PidModeScreen.h"
 #include "MenuScreen.h"
+#include "ModeScreen.h"
+#include "ThermometerModeScreen.h"
 #include <IoAbstraction.h>
 #include "Alarm.h"
 #include "PidTask.h"
+#include "LcdContainer.h"
+
+/*
+ * Return the sole instance
+ */
+Controller& Controller::instance() {
+    static Controller one;
+    return one;
+}
 
 /*
  * Cancel the scheduled task that refreshes the screen.
@@ -40,9 +51,14 @@ void Controller::switchToPID(){
     currentScreen = pid;
 }
 
-void Controller::switchToDirect() {
+void Controller::switchToMode() {
+    static ModeScreen &screen = ModeScreen::instance();
+
+    scheduleScreen(screen);
+    currentScreenController = &modeScreenController;
+
     previousScreen = currentScreen;
-    currentScreen = direct;
+    currentScreen = mode;
 }
 
 void Controller::switchToMenu() {
@@ -56,6 +72,11 @@ void Controller::switchToMenu() {
 }
 
 void Controller::switchToThermometer() {
+    static ThermometerModeScreen &screen = ThermometerModeScreen::instance();
+
+    scheduleScreen(screen);
+    currentScreenController = &thermometerScreenController;
+    
     previousScreen = currentScreen;
     currentScreen = thermometer;
 }
@@ -72,6 +93,10 @@ void Controller::encoderPressed() {
     currentScreenController->click();
 }
 
+void Controller::encoderLongPressed() {
+    currentScreenController->longClick();
+}
+
 void Controller::button1Pressed() {
     static PidTask &pt = PidTask::instance();
     pt.toggle();
@@ -83,7 +108,8 @@ void Controller::button2Pressed() {
 }
 
 void Controller::button3Pressed() {
-
+    static LcdContainer &container = LcdContainer::instance();
+    container.getLCD().begin(4,20);
 }
 
 void Controller::button4Pressed() {
@@ -92,7 +118,7 @@ void Controller::button4Pressed() {
     } else {
         switch(previousScreen) {
             case pid: switchToPID(); break;
-            case direct: switchToDirect(); break;
+            case mode: switchToMode(); break;
             case thermometer: switchToThermometer(); break;
             default: switchToPID(); break;
         }

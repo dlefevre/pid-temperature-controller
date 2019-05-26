@@ -6,34 +6,37 @@
 #include "TemperatureProbe.h"
 
 /*
+ * Fetch and/or create instance
+ */
+ThermometerModeScreen & ThermometerModeScreen::instance() {
+    static ThermometerModeScreen one;
+    return one;
+}
+
+/*
  * Constructor
  */
 ThermometerModeScreen::ThermometerModeScreen() {
-
+    setSelectorMax(2);
+    setSelectorPosition(2);
 }
 
 /*
  * Render screen
  */
 void ThermometerModeScreen::render() {
-    // TemperatureProbe &probe = TemperatureProbe::instance();
-
-    // int realraw = probe.getUnfilteredRaw();
-    // raw = probe.getFilteredRaw();
-    // temperature = probe.getTemperature();
-    // fraction = (temperature % 1000) / 100;
-    // temperature /= 1000;
+    TemperatureProbe &probe = TemperatureProbe::instance();
     
-    // char buf[10];
-    // sprintf(buf, "  Raw:     %4d     ", realraw);
-    // lcd.setCursor(0, 0);
-    // lcd.print(buf);
-    // sprintf(buf, "  Smooth:  %4d     ", raw);
-    // lcd.setCursor(0, 1);
-    // lcd.print(buf);
-    // sprintf(buf, "  Temp:    %4d.", temperature);
-    // lcd.setCursor(0, 2);
-    // lcd.print(buf);
-    // sprintf(buf, "%1d  ", fraction);
-    // lcd.print(buf);
+    lcd.setCursor(2, 0);
+    lcd.print("T:");
+    lcd.print(fmtDec(probe.getTemperature()));
+    lcd.print("     ");
+    lcd.setCursor(2, 1);
+    lcd.print("R: ");
+    lcd.print(probe.getFilteredRaw());
+    lcd.print("     ");
+    lcd.setCursor(2, 2);
+    lcd.print("M: Thermometer");
+
+    renderSelector();
 }

@@ -13,6 +13,12 @@ class MenuScreenController : public AbstractScreenController {
         void goLeft() override;
         void goRight() override;
         void click() override;
+        void longClick() override;
+
+    private:
+        int multiplier;
+        
+        template<typename T> T modify(T value, T delta, T min, T max);
 };
 
 #endif

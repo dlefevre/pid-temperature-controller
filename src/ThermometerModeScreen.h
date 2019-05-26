@@ -11,25 +11,10 @@
 
 class ThermometerModeScreen : public AbstractScreen {
     public:
-        static inline ThermometerModeScreen& instance() FORCE_INLINE;
+        static ThermometerModeScreen& instance();
 
         ThermometerModeScreen();
         void render() override;
-        
-    private:
-        static ThermometerModeScreen *pInstance;
-
-        long raw;
-        long temperature;
-        int fraction;
 };
-
-/*
- * Fetch and/or create instance
- */
-ThermometerModeScreen& ThermometerModeScreen::instance() {
-    static ThermometerModeScreen one;
-    return one;
-}
 
 #endif

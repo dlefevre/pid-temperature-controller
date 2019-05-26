@@ -4,6 +4,17 @@
 
 #include "Alarm.h"
 
+/*
+ * Get the sole instance
+ */
+Alarm & Alarm::instance() {
+    static Alarm one;
+    return one;
+}
+
+/*
+ * Scheduled loop
+ */
 void Alarm::exec() {
     if(enabled) {
         if(time > 0) {

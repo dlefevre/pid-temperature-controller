@@ -7,6 +7,14 @@
 #include "Config.h"
 
 /*
+ * Return the sole instance
+ */
+Heater & Heater::instance() {
+    static Heater one;
+    return one;
+}
+
+/*
  * Constructor
  */
 Heater::Heater() {
@@ -27,5 +35,11 @@ void Heater::exec() {
     } else {
         PORTB = PORTB & B01111111;
     }
+}
 
+/*
+ * Calculate and return the total power
+ */
+long Heater::getPower() {
+    return (long)duration * 100000 / frame;
 }

@@ -41,7 +41,9 @@ void handleRotate(int newValue) {
  * Handler for rotary encoder push action
  */
 void handleClick(uint8_t pin, bool held) {
-    if(!held) {
+    if(held) {
+        controller.encoderLongPressed();
+    } else {
         controller.encoderPressed();
     }
 }
@@ -54,7 +56,7 @@ void setup() {
 
     // Set up serial console
     SerialTask &st = SerialTask::instance();
-    taskManager.scheduleFixedRate(1000, &st);
+    taskManager.scheduleFixedRate(500, &st);
 
     // Set up rotary encoder
     switches.initialise(ioUsingArduino(), INPUT_PULLUP);

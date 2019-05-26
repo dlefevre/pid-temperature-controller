@@ -8,6 +8,14 @@
 #include "Config.h"
 
 /*
+ * Return the sole instance
+ */
+TemperatureProbe& TemperatureProbe::instance() {
+    static TemperatureProbe one;
+    return one;
+}
+
+/*
  * Constructor, sets the pin
  */
 TemperatureProbe::TemperatureProbe() : 

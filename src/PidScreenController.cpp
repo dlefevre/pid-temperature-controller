@@ -7,6 +7,7 @@
 #include "PidModeScreen.h"
 #include "Alarm.h"
 #include "PidTask.h"
+#include "Controller.h"
 
 
 void PidScreenController::goLeft() {
@@ -59,6 +60,13 @@ void PidScreenController::goRight() {
 
 void PidScreenController::click() {
     static PidModeScreen &screen = PidModeScreen::instance();
+    static Controller &controller = Controller::instance();
+
+    if(screen.getSelectorPosition() == 2) {
+        controller.switchToMode();
+        return;
+    }
+
     if(screen.getSelectorEditable()) {
         screen.setSelectorEditable(false);
     } else {

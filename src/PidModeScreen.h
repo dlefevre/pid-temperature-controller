@@ -11,7 +11,7 @@
 
 class PidModeScreen : public AbstractScreen {
     public:
-        static inline PidModeScreen& instance() FORCE_INLINE;
+        static PidModeScreen& instance();
 
         PidModeScreen();
         void render() override;
@@ -22,13 +22,5 @@ class PidModeScreen : public AbstractScreen {
     private:
 
 };
-
-/*
- * Fetch and/or create instance
- */
-PidModeScreen& PidModeScreen::instance() {
-    static PidModeScreen one;
-    return one;
-}
 
 #endif
