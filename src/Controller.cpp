@@ -22,63 +22,37 @@ Controller& Controller::instance() {
 }
 
 /*
- * Cancel the scheduled task that refreshes the screen.
- */
-void Controller::cancelScreenTask() {
-    if(screenTask) {
-        taskManager.cancelTask(screenTask);
-        screenTask = 0;
-    }
-}
-
-/*
  * Schedule a new task for refreshing the screen
  */
-void Controller::scheduleScreen(AbstractScreen &screen) {
-    cancelScreenTask();
+void Controller::scheduleScreen(AbstractScreen &screen, AbstractScreenController &controller, Screen id) {
+    if(screenTask != 0xFF) {
+        taskManager.cancelTask(screenTask);
+    }
+
     screen.clear();
     screen.render();
+
     screenTask = taskManager.scheduleFixedRate(SCREEN_REFRESH, &screen);
+    currentScreenController = &controller;
+    
+    previousScreen = currentScreen;
+    currentScreen = id;
 }
 
 void Controller::switchToPID(){
-    static PidModeScreen &screen = PidModeScreen::instance();
-    
-    scheduleScreen(screen);
-    currentScreenController = &pidScreenController;
-
-    previousScreen = currentScreen;
-    currentScreen = pid;
+    scheduleScreen(PidModeScreen::instance(), pidScreenController, pid);
 }
 
 void Controller::switchToMode() {
-    static ModeScreen &screen = ModeScreen::instance();
-
-    scheduleScreen(screen);
-    currentScreenController = &modeScreenController;
-
-    previousScreen = currentScreen;
-    currentScreen = mode;
+    scheduleScreen(ModeScreen::instance(), modeScreenController, mode);
 }
 
 void Controller::switchToMenu() {
-    static MenuScreen &screen = MenuScreen::instance();
-
-    scheduleScreen(screen);
-    currentScreenController = &menuScreenController;
-
-    previousScreen = currentScreen;
-    currentScreen = menu;
+    scheduleScreen(MenuScreen::instance(), menuScreenController, menu);
 }
 
 void Controller::switchToThermometer() {
-    static ThermometerModeScreen &screen = ThermometerModeScreen::instance();
-
-    scheduleScreen(screen);
-    currentScreenController = &thermometerScreenController;
-    
-    previousScreen = currentScreen;
-    currentScreen = thermometer;
+    scheduleScreen(ThermometerModeScreen::instance(), thermometerScreenController, thermometer);
 }
 
 void Controller::encoderLeft() {
@@ -108,8 +82,7 @@ void Controller::button2Pressed() {
 }
 
 void Controller::button3Pressed() {
-    static LcdContainer &container = LcdContainer::instance();
-    container.getLCD().begin(4,20);
+    LcdContainer::instance().getLCD().begin(4,20);
 }
 
 void Controller::button4Pressed() {

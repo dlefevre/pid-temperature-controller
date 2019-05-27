@@ -16,7 +16,6 @@ double Config::pidKp;
 double Config::pidKi;
 double Config::pidKd;
 int Config::pidMaxPower;
-int Config::directMaxPower;
 bool Config::serialOn;
 long Config::serialBaud;
 
@@ -37,7 +36,6 @@ void Config::save() {
     EEPROM.updateDouble(address, pidKi);                address += sizeof(double); 
     EEPROM.updateDouble(address, pidKd);                address += sizeof(double); 
     EEPROM.updateInt(address, pidMaxPower);             address += sizeof(int);
-    EEPROM.updateInt(address, directMaxPower);          address += sizeof(int);
 }
 
 /*
@@ -62,7 +60,6 @@ void Config::load() {
     pidKi                   = EEPROM.readDouble(address); address += sizeof(double); 
     pidKd                   = EEPROM.readDouble(address); address += sizeof(double);
     pidMaxPower             = EEPROM.readInt(address);    address += sizeof(int);
-    directMaxPower          = EEPROM.readInt(address);    address += sizeof(int);
     
     loaded = true;
 }
@@ -77,7 +74,6 @@ void Config::initialize() {
     pidKi = DEFAULT_PIDKi;
     pidKd = DEFAULT_PIDkd;
     pidMaxPower = DEFAULT_PIDMAXPOWER;
-    directMaxPower = DEFAULT_DIRECTMAXPOWER;
     serialOn = DEFAULT_SERIALON;
     serialBaud = DEFAULT_SERIALBAUD;
 
@@ -129,11 +125,6 @@ int Config::getPidMaxPower() {
     return pidMaxPower;
 }
 
-int Config::getDirectMaxPower() {
-    verify();
-    return directMaxPower;
-}
-
 bool Config::getSerialOn() {
     verify();
     return serialOn;
@@ -166,10 +157,6 @@ void Config::setPidKd(double value) {
 
 void Config::setPidMaxPower(int value) {
     pidMaxPower = value;
-}
-
-void Config::setDirectMaxPower(int value) {
-    directMaxPower = value;
 }
 
 void Config::setSerialOn(bool value) {

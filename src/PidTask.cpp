@@ -26,7 +26,7 @@ PidTask::PidTask() :
     kd(Config::getPidKd()),
     maxPower(Config::getPidMaxPower()),
     pid(&input, &output, &setPoint, kp, ki, kd, P_ON_M, DIRECT) {
-    pid.SetOutputLimits(0.0, HEATING_WINDOW * maxPower / 100);
+    pid.SetOutputLimits(0.0, (double)HEATING_WINDOW * maxPower / 100.0);
 }
 
 /*
@@ -36,9 +36,11 @@ void PidTask::exec() {
     static TemperatureProbe &probe = TemperatureProbe::instance();
     static Heater &heater = Heater::instance();
 
-    input = (double)probe.getTemperature() / 1000;
-    pid.Compute();
-    heater.setDuration((unsigned int)output, 2000);
+    if(active) {
+        input = (double)probe.getTemperature() / 1000.0;
+        pid.Compute();
+        heater.setDuration((int)output, HEATING_WINDOW);
+    }
 }
 
 /*

@@ -16,9 +16,10 @@ class MenuScreenController : public AbstractScreenController {
         void longClick() override;
 
     private:
-        int multiplier;
+        short multiplier;
         
         template<typename T> T modify(T value, T delta, T min, T max);
+        void updateItem(short);
 };
 
 #endif

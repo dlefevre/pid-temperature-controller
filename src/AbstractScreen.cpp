@@ -6,6 +6,8 @@
 #include "Config.h"
 #include "LcdContainer.h"
 
+static char buf[10];
+
 /*
  * Constructor
  */
@@ -16,7 +18,6 @@ AbstractScreen::AbstractScreen() : lcd(LcdContainer::instance().getLCD()) {
  * Format a whole number (positive only)
  */
 char * fmtWhole(long value) {
-    static char buf[10];
     char * ptr = &buf[9];
 
     *(ptr) = '\0';
@@ -32,7 +33,6 @@ char * fmtWhole(long value) {
  * Format a decimal number xx.x
  */
 char * fmtDec(int whole, int fraction) {
-    static char buf[10];
     char * ptr = buf;
     int mag = 100;
 
@@ -77,7 +77,6 @@ char * fmtDec(double value) {
  * Return a formatted string hh::mm::ss
  */
 char * fmtTime(int hours, int minutes, int seconds) {
-    static char buf[10];
     char * ptr = buf;
 
     if(hours > 99) {

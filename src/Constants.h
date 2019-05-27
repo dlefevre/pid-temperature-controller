@@ -49,12 +49,11 @@
 #define DEFAULT_PIDKi 5
 #define DEFAULT_PIDkd 1
 #define DEFAULT_PIDMAXPOWER 80
-#define DEFAULT_DIRECTMAXPOWER 80
 #define DEFAULT_SERIALON true
 #define DEFAULT_SERIALBAUD 115200L
 
 // Heating window
-#define HEATING_WINDOW 2000.0
+#define HEATING_WINDOW 2000
 
 // Minimal screen refresh timeout
 #define SCREEN_REFRESH 500

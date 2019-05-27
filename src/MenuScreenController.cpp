@@ -9,6 +9,8 @@
 #include "PidTask.h"
 #include "SerialTask.h"
 
+static void updateItem(MenuScreen &, short);
+
 /*
  * Assumed menu structure:
  *  - Kp
@@ -24,81 +26,29 @@
 
 void MenuScreenController::goLeft() {
     static MenuScreen &screen = MenuScreen::instance();
-    static SerialTask &st = SerialTask::instance();
-    static PidTask &pt = PidTask::instance();
-    static TemperatureProbe & probe = TemperatureProbe::instance();
 
     if(!screen.getSelectorEditable()) {
         screen.moveSelectorDown();
         screen.render();
     } else {
-        switch(screen.getSelectorPosition()) {
-            case 0: pt.setKp(modify<double>(pt.getKp(), -0.1, 0.0, 100.0)); break;
-            case 1: pt.setKi(modify<double>(pt.getKi(), -0.1, 0.0, 100.0)); break;
-            case 2: pt.setKd(modify<double>(pt.getKd(), -0.1, 0.0, 100.0)); break;
-            case 3: pt.setMaxPower(modify<int>(pt.getMaxPower(), -1, 0, 100)); break;
-            case 4: break;
-            case 5: probe.setCalibrationPoint25(modify<long>(probe.getCalibrationPoint25(), -1l, 0l, 1023l)); break;
-            case 6: probe.setCalibrationPoint75(modify<long>(probe.getCalibrationPoint75(), -1l, 0l, 1023l)); break;
-            case 7: st.toggle(); break;
-            case 8:
-                switch(st.getBaud()) {
-                    case 1200l:   st.setBaud(1200l); break;
-                    case 2400l:   st.setBaud(1200l); break;
-                    case 4800l:   st.setBaud(2400l); break;
-                    case 9600l:   st.setBaud(4800l); break;
-                    case 19200l:  st.setBaud(9600l); break;
-                    case 38400l:  st.setBaud(19200l); break;
-                    case 57600l:  st.setBaud(38400l); break;
-                    case 115200l: st.setBaud(57600l); break;
-                    default:      st.setBaud(9600l); break;
-                }
-                break;
-        }
-        screen.renderMenuItem(screen.getSelectorPosition());
+        updateItem(-1);
     }
 }
 
 void MenuScreenController::goRight() {
     static MenuScreen &screen = MenuScreen::instance();
-    static SerialTask &st = SerialTask::instance();
-    static PidTask &pt = PidTask::instance();
-    static TemperatureProbe & probe = TemperatureProbe::instance();
 
     if(!screen.getSelectorEditable()) {
         screen.moveSelectorUp();
         screen.render();
     } else {
-        switch(screen.getSelectorPosition()) {
-            case 0: pt.setKp(modify<double>(pt.getKp(), 0.1, 0.0, 100.0)); break;
-            case 1: pt.setKi(modify<double>(pt.getKi(), 0.1, 0.0, 100.0)); break;
-            case 2: pt.setKd(modify<double>(pt.getKd(), 0.1, 0.0, 100.0)); break;
-            case 3: pt.setMaxPower(modify<int>(pt.getMaxPower(), 1, 0, 100)); break;
-            case 4: break;
-            case 5: probe.setCalibrationPoint25(modify<long>(probe.getCalibrationPoint25(), 1l, 0l, 1023l)); break;
-            case 6: probe.setCalibrationPoint75(modify<long>(probe.getCalibrationPoint75(), 1l, 0l, 1023l)); break;
-            case 7: st.toggle(); break;
-            case 8:
-                switch(st.getBaud()) {
-                    case 1200l:   st.setBaud(2400l); break;
-                    case 2400l:   st.setBaud(4800l); break;
-                    case 4800l:   st.setBaud(9600l); break;
-                    case 9600l:   st.setBaud(19200l); break;
-                    case 19200l:  st.setBaud(38400l); break;
-                    case 38400l:  st.setBaud(57600l); break;
-                    case 57600l:  st.setBaud(115200l); break;
-                    case 115200l: st.setBaud(115200l); break;
-                    default:      st.setBaud(9600l); break;
-                }
-                break;
-        }
-        screen.renderMenuItem(screen.getSelectorPosition());
+        updateItem(1);
     }
 }
 
 void MenuScreenController::click() {
     static MenuScreen &screen = MenuScreen::instance();
-    if(screen.getSelectorPosition() == 9) {
+    if(screen.getSelectorPosition() == 8) {
         Config::save();
     } else {
         if(screen.getSelectorEditable()) {
@@ -130,4 +80,35 @@ template<typename T> T MenuScreenController::modify(T value, T delta, T min, T m
         return max;
     }
     return value;
+}
+
+
+void MenuScreenController::updateItem(short sign) {
+    static MenuScreen & screen = MenuScreen::instance();
+    static SerialTask &st = SerialTask::instance();
+    static PidTask &pt = PidTask::instance();
+    static TemperatureProbe & probe = TemperatureProbe::instance();
+    static const long bauds[] = {9600l, 9600l, 19200l, 38400l, 57600l, 115200l, 115200l};
+
+    switch(screen.getSelectorPosition()) {
+        case 0: pt.setKp((double)modify((long)(pt.getKp() * 1024), 100l * sign, 0l, 1000000l) / 1024.0); break;
+        case 1: pt.setKi((double)modify((long)(pt.getKi() * 1024), 100l * sign, 0l, 1000000l) / 1024.0); break;
+        case 2: pt.setKd((double)modify((long)(pt.getKd() * 1024), 100l * sign, 0l, 1000000l) / 1024.0); break;
+        case 3: pt.setMaxPower(modify(pt.getMaxPower(), 1 * sign, 0, 100)); break;
+        case 4: probe.setCalibrationPoint25(modify(probe.getCalibrationPoint25(), 1l * sign, 0l, 1023l)); break;
+        case 5: probe.setCalibrationPoint75(modify(probe.getCalibrationPoint75(), 1l * sign, 0l, 1023l)); break;
+        case 6: st.toggle(); break;
+        case 7:
+            long currentBaud = st.getBaud();
+            long newBaud = 9600;
+            for(int i=1; i<=5; ++i) {
+                if(bauds[i] == currentBaud) {
+                    newBaud = bauds[i + sign];
+                    break;
+                }
+            }
+            st.setBaud(newBaud);
+            break;
+    }
+    screen.renderMenuItem(screen.getSelectorPosition());
 }

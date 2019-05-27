@@ -23,7 +23,7 @@ class Heater : public Executable {
 
     private:
         int duration;
-        int frame;
+        int frame = HEATING_WINDOW;
         bool active;
 };
 

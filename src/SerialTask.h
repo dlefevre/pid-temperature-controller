@@ -7,6 +7,7 @@
 
 #include <IoAbstraction.h>
 #include "Config.h"
+#include <CommandHandler.h>
 
 class SerialTask : public Executable {
     public:
@@ -24,11 +25,9 @@ class SerialTask : public Executable {
     private:
         bool enabled;
         long baud;
+        CommandHandler<12> ch;
 
-        long setPoint;
-        long temperature;
-        long power;
-        int maxPower;
+        void printPlotterData();
 };
 
 bool SerialTask::isEnabled() {

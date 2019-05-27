@@ -28,15 +28,15 @@ void ThermometerModeScreen::render() {
     TemperatureProbe &probe = TemperatureProbe::instance();
     
     lcd.setCursor(2, 0);
-    lcd.print("T:");
+    lcd.print(F("T:"));
     lcd.print(fmtDec(probe.getTemperature()));
-    lcd.print("     ");
+    lcd.print(F("     "));
     lcd.setCursor(2, 1);
-    lcd.print("R: ");
+    lcd.print(F("R: "));
     lcd.print(probe.getFilteredRaw());
-    lcd.print("     ");
+    lcd.print(F("     "));
     lcd.setCursor(2, 2);
-    lcd.print("M: Thermometer");
+    lcd.print(F("M: Thermometer"));
 
     renderSelector();
 }

@@ -16,9 +16,9 @@ ModeScreen::ModeScreen() {
 void ModeScreen::render() {
     lcd.clear();
     lcd.setCursor(2, 0);
-    lcd.print("PID");
+    lcd.print(F("PID"));
     lcd.setCursor(2, 1);
-    lcd.print("Thermometer");
+    lcd.print(F("Thermometer"));
 
     renderSelector();
 }

@@ -18,7 +18,7 @@ class TemperatureProbe : public Executable {
         long getTemperature();        // Return temperature in degrees Celcius * 1000
         int getUnfilteredRaw();      // Return raw unfiltered analog value.
         int getFilteredRaw();        // Return smoothed raw value.
-        inline void exec() override FORCE_INLINE;
+        void exec() override;
         inline long getCalibrationPoint25() FORCE_INLINE;
         inline long getCalibrationPoint75() FORCE_INLINE;
         void setCalibrationPoint25(long);

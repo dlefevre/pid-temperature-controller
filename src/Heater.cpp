@@ -41,5 +41,5 @@ void Heater::exec() {
  * Calculate and return the total power
  */
 long Heater::getPower() {
-    return (long)duration * 100000 / frame;
+    return (unsigned long)duration * 100000 / frame;
 }

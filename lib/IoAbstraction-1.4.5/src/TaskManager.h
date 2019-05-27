@@ -9,7 +9,7 @@
 #include "BasicIoAbstraction.h"
 
 // Force number of tasks to 10
-#define DEFAULT_TASK_SIZE 8
+#define DEFAULT_TASK_SIZE 10
 
 /** 
  * @file TaskManager.h

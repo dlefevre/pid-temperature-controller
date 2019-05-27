@@ -42,9 +42,8 @@ class Controller {
         ModeScreenController modeScreenController;
         ThermometerScreenController thermometerScreenController;
 
-        uint8_t screenTask;
-        void cancelScreenTask();
-        void scheduleScreen(AbstractScreen &);
+        uint8_t screenTask = 0xFF;
+        void scheduleScreen(AbstractScreen &, AbstractScreenController &, Screen);
 };
 
 #endif

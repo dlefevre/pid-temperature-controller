@@ -29,7 +29,7 @@ PidModeScreen::PidModeScreen() {
 void PidModeScreen::renderSetPoint() {
     static PidTask &pi = PidTask::instance();
     lcd.setCursor(2, 0);
-    lcd.print("S:");
+    lcd.print(F("S:"));
     lcd.print(fmtDec(pi.getSetPoint()));
 }
 
@@ -40,7 +40,7 @@ void PidModeScreen::renderTemperature() {
     static TemperatureProbe &probe = TemperatureProbe::instance();
 
     lcd.setCursor(13, 0);
-    lcd.print("T:");
+    lcd.print(F("T:"));
     lcd.print(fmtDec(probe.getTemperature()));
 }
 
@@ -51,7 +51,7 @@ void PidModeScreen::renderAlarm() {
     static Alarm & alarm = Alarm::instance();
 
     lcd.setCursor(2, 1);
-    lcd.print("A: ");
+    lcd.print(F("A: "));
     lcd.print(fmtTime(alarm.getTime()));
 }
 
@@ -60,6 +60,7 @@ void PidModeScreen::renderAlarm() {
  */
 void PidModeScreen::render() {
     static Heater &heater = Heater::instance();
+    static PidTask &pt = PidTask::instance();
 
     renderSetPoint();
     renderTemperature();
@@ -67,15 +68,20 @@ void PidModeScreen::render() {
     renderSelector();
 
     lcd.setCursor(2, 2);
-    lcd.print("M: PID");
+    lcd.print(F("M: PID"));
 
     lcd.setCursor(2, 3);
     if(heater.isActive()) {
-        lcd.print("I: running @");
+        lcd.print(F("I: "));
+        if(pt.isActive()) {
+            lcd.print(F("running @"));
+        } else {
+            lcd.print(F("manual @ "));
+        }
         lcd.print(fmtDec(heater.getPower()));
         lcd.print("%");
     } else {
-        lcd.print("I: disabled       ");
+        lcd.print(F("I: disabled       "));
     }
     
 }

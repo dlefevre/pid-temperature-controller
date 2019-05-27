@@ -15,7 +15,6 @@ class Config {
         static double getPidKi();
         static double getPidKd();
         static int getPidMaxPower();
-        static int getDirectMaxPower();
         static bool getSerialOn();
         static long getSerialBaud();
 
@@ -25,7 +24,6 @@ class Config {
         static void setPidKi(double);
         static void setPidKd(double);
         static void setPidMaxPower(int);
-        static void setDirectMaxPower(int);
         static void setSerialOn(bool);
         static void setSerialBaud(long); 
         static void save();
@@ -41,7 +39,6 @@ class Config {
         static double pidKi;
         static double pidKd;
         static int pidMaxPower;
-        static int directMaxPower;
         static bool serialOn;
         static long serialBaud;
 

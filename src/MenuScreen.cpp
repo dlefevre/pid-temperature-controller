@@ -46,7 +46,7 @@ void MenuScreen::renderLine(int line, const char *title, const char *val) {
  * Constructor
  */
 MenuScreen::MenuScreen() {
-    setSelectorMax(9);
+    setSelectorMax(8);
 }
 
 /*
@@ -74,11 +74,10 @@ void MenuScreen::renderMenuItem(int item) {
         case 1: renderLine(line, "Ki", fmtDec(pt.getKi())); break;
         case 2: renderLine(line, "Kd", fmtDec(pt.getKd())); break;
         case 3: renderLine(line, "PID Max.", fmtWhole((long)pt.getMaxPower())); break;
-        case 4: renderLine(line, "Direct Max.", fmtWhole(0L)); break;
-        case 5: renderLine(line, "Cal. 25", fmtWhole(probe.getCalibrationPoint25())); break;
-        case 6: renderLine(line, "Cal. 75", fmtWhole(probe.getCalibrationPoint75())); break;
-        case 7: renderLine(line, "Serial", st.isEnabled() ? "On" : "Off"); break;
-        case 8: renderLine(line, "Baud", fmtWhole(st.getBaud())); break;
-        case 9: renderLine(line, "----- Save -----", ""); break;
+        case 4: renderLine(line, "Cal. 25", fmtWhole(probe.getCalibrationPoint25())); break;
+        case 5: renderLine(line, "Cal. 75", fmtWhole(probe.getCalibrationPoint75())); break;
+        case 6: renderLine(line, "Serial", st.isEnabled() ? "On" : "Off"); break;
+        case 7: renderLine(line, "Baud", fmtWhole(st.getBaud())); break;
+        case 8: renderLine(line, "------ Save ------", ""); break;
     }
 }
